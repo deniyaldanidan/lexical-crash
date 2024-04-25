@@ -4,6 +4,7 @@ import {
 } from "@lexical/react/LexicalComposer";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { ListNode, ListItemNode } from "@lexical/list";
+import { AutoLinkNode, LinkNode } from "@lexical/link";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
@@ -15,7 +16,13 @@ import { EditorState } from "lexical";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { useState } from "react";
 import ToolbarPlugin from "../plugins/ToolbarPlugin";
-import { editorTheme, initialEditorData, onEditorError } from "./editorData";
+import {
+  URL_MATCHERS,
+  editorTheme,
+  initialEditorData,
+  onEditorError,
+} from "./editorData";
+import { AutoLinkPlugin } from "@lexical/react/LexicalAutoLinkPlugin";
 
 export default function Editor() {
   const [myEditorState, setMyEditorState] = useState<EditorState>();
@@ -25,7 +32,7 @@ export default function Editor() {
     theme: editorTheme,
     onError: onEditorError,
     editorState: JSON.stringify(initialEditorData),
-    nodes: [HeadingNode, QuoteNode, ListNode, ListItemNode],
+    nodes: [HeadingNode, QuoteNode, ListNode, ListItemNode, AutoLinkNode],
   };
 
   const onchange = (editorSt: EditorState) => {
@@ -50,6 +57,7 @@ export default function Editor() {
           />
           <CheckListPlugin />
           <ListPlugin />
+          <AutoLinkPlugin matchers={URL_MATCHERS} />
           <OnChangePlugin onChange={onchange} />
           <HistoryPlugin />
           <AutoFocusPlugin />
